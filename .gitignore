@@ -1,0 +1,15 @@
+# Bundler
+.bundle
+vendor
+Gemfile.lock
+
+# Jekyll
+.jekyll-cache
+.jekyll-metadata
+_site
+
+# IDE
+.idea
+
+# 로컬 미리보기 설정
+.claude

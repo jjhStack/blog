@@ -1,0 +1,47 @@
+---
+layout: default
+---
+{%- assign stacks = '' -%}
+{%- for post in site.posts -%}
+  {%- capture s -%}{% include stack.html post=post %}{%- endcapture -%}
+  {%- assign stacks = stacks | append: s | append: '|' -%}
+{%- endfor -%}
+{%- assign all_stacks = stacks | split: '|' -%}
+{%- assign unique_stacks = all_stacks | uniq | sort_natural -%}
+
+<div class="filters" role="group" aria-label="주제로 거르기">
+    <button class="chip" type="button" data-stack="" aria-pressed="true">전체</button>
+    {%- for s in unique_stacks %}
+      {%- assign n = 0 -%}
+      {%- for x in all_stacks -%}{%- if x == s -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor %}
+    <button class="chip" type="button" data-stack="{{ s | escape }}" aria-pressed="false">{{ s }}<small>{{ n }}</small></button>
+    {%- endfor %}
+    <span class="count" id="count" aria-live="polite">글 {{ site.posts.size }}편</span>
+</div>
+
+<section class="log" id="log" aria-label="글 목록">
+  {%- assign months = site.posts | group_by_exp: 'p', "p.date | date: '%Y.%m'" -%}
+  {%- for m in months %}
+  <div class="month">
+    <h2>{{ m.items[0].date | date: '%Y년 %-m월' }}</h2>
+      {%- for post in m.items -%}
+        {%- capture stack -%}{% include stack.html post=post %}{%- endcapture -%}
+        {%- capture search_text -%}{{ post.title }} {{ post.error }} {{ post.description }} {{ post.categories | join: ' ' }} {{ post.tags | join: ' ' }} {{ post.content | strip_html | strip_newlines | truncate: 2000, '' }}{%- endcapture %}
+      <a class="entry" href="{{ post.url | relative_url }}" data-stack="{{ stack | escape }}" data-search="{{ search_text | escape }}">
+        <span class="row">
+          <span class="stack">{{ stack }}</span>
+          <h3>{{ post.title }}</h3>
+          <span class="dots" aria-hidden="true"></span>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%m.%d' }}</time>
+        </span>
+        {%- if post.error %}
+        <p class="sub"><code>{{ post.error | escape }}</code></p>
+        {%- elsif post.description %}
+        <p class="sub">{{ post.description | escape }}</p>
+        {%- endif %}
+      </a>
+      {%- endfor %}
+  </div>
+  {%- endfor %}
+  <p class="empty" id="empty" hidden>찾는 글이 없어요. 핵심 단어만 남겨 보거나 <button type="button" id="reset">검색을 초기화</button>해 보세요.</p>
+</section>

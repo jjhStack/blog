@@ -1,0 +1,15 @@
+<div class="post-head wrap">
+  <div class="crumbs">
+    <a href="{{ '/' | relative_url }}">글 목록으로</a>
+    {%- for c in page.categories %}
+    <a href="{{ '/categories/' | relative_url }}#{{ c | slugify }}">{{ c }}</a>
+    {%- endfor %}
+  </div>
+  <h1>{{ page.title }}</h1>
+  <div class="meta">
+    <time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%Y년 %-m월 %-d일' }}</time>
+    {%- assign words = page.content | strip_html | number_of_words: 'cjk' -%}
+    {%- assign minutes = words | divided_by: 300 | plus: 1 %}
+    <span>읽는 데 {{ minutes }}분</span>
+  </div>
+</div>

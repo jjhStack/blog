@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>jjh 디자인 시안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F3; --surface:#F7F9FA; --ink:#18222E; --muted:#5B6875; --rule:#C9D0D8;
+  --error:#B83A2E; --error-bg:#F6E3E0; --fix:#12705F; --fix-bg:#DDEFEA; --marker:#F5E35A;
+  --focus:#2F5FD0;
+  --sans:"IBM Plex Sans KR",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+:root[data-theme="dark"]{
+  --paper:#141B23; --surface:#1A232D; --ink:#E3E8EE; --muted:#8D99A6; --rule:#2A3440;
+  --error:#E8705F; --error-bg:#2E1E1D; --fix:#4FC1A8; --fix-bg:#16302B; --marker:#7A6A12; --focus:#7FA2FF;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#141B23; --surface:#1A232D; --ink:#E3E8EE; --muted:#8D99A6; --rule:#2A3440;
+    --error:#E8705F; --error-bg:#2E1E1D; --fix:#4FC1A8; --fix-bg:#16302B; --marker:#7A6A12; --focus:#7FA2FF;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.7 var(--sans);word-break:keep-all}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:3px;border-radius:4px}
+mark{background:var(--marker);color:inherit;padding:0 1px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+/* 시안 전환 바 (시안용, 실제 블로그엔 없음) */
+.proto{position:sticky;top:0;z-index:5;background:var(--ink);color:var(--paper);font-size:14px}
+.proto .wrap{display:flex;gap:8px;align-items:center;min-height:44px;flex-wrap:wrap}
+.proto strong{font-weight:500;margin-right:auto}
+.proto button{font:inherit;background:transparent;color:inherit;border:1px solid color-mix(in srgb,var(--paper) 35%,transparent);border-radius:999px;padding:3px 14px;cursor:pointer}
+.proto button[aria-pressed="true"]{background:var(--paper);color:var(--ink)}
+
+/* 헤더 */
+header.site{border-bottom:1px solid var(--rule)}
+header.site .wrap{display:flex;align-items:baseline;gap:24px;padding-top:22px;padding-bottom:18px;flex-wrap:wrap}
+.logo{font-weight:700;font-size:20px;text-decoration:none;letter-spacing:-.01em}
+.logo span{font-weight:400;color:var(--muted);font-size:15px;margin-left:8px}
+nav.main{margin-left:auto;display:flex;gap:20px;font-size:15px}
+nav.main a{text-decoration:none;color:var(--muted)}
+nav.main a[aria-current]{color:var(--ink);font-weight:500}
+
+/* 홈: 검색 히어로 */
+.hero{padding:64px 0 28px}
+.hero h1{font-size:clamp(26px,4vw,38px);line-height:1.3;font-weight:700;margin:0 0 6px;letter-spacing:-.02em;max-width:22em}
+.hero p{margin:0 0 28px;color:var(--muted)}
+.search{display:flex;align-items:stretch;background:var(--surface);border:1.5px solid var(--ink);border-radius:10px;overflow:hidden}
+.search label{display:flex;align-items:center;padding:0 16px;color:var(--error);font:500 15px var(--mono);user-select:none}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:400 17px/1 var(--mono);padding:18px 16px 18px 0}
+.search input:focus{outline:none}
+.search:focus-within{box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 35%,transparent)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;align-items:center}
+.chip{font:inherit;font-size:14px;background:transparent;color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:3px 12px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip small{color:var(--muted);margin-left:4px}
+.chip[aria-pressed="true"] small{color:inherit;opacity:.7}
+.count{margin-left:auto;font-size:14px;color:var(--muted)}
+
+/* 홈: 기록 목록 */
+.log{padding:12px 0 80px}
+.month{display:grid;grid-template-columns:96px 1fr;gap:0 24px;border-top:1px solid var(--rule);padding-top:20px;margin-top:20px}
+.month>h2{margin:0;font-size:15px;font-weight:500;color:var(--muted);font-variant-numeric:tabular-nums}
+.entry{display:grid;grid-template-columns:34px 1fr;gap:0 12px;padding:6px 0 22px;text-decoration:none}
+.entry .day{font-size:15px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:3px}
+.entry .stack{font-size:13px;color:var(--muted)}
+.entry h3{margin:0 0 6px;font-size:19px;line-height:1.45;font-weight:500}
+.entry:hover h3{text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px}
+.entry code{display:block;font:400 13.5px/1.55 var(--mono);color:var(--error);border-left:2px solid var(--error);padding:2px 0 2px 12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entry code.note{color:var(--muted);border-color:var(--rule);font-family:var(--sans);font-size:14px}
+.empty{padding:40px 0;color:var(--muted)}
+.empty button{font:inherit;color:var(--ink);background:none;border:0;text-decoration:underline;cursor:pointer;padding:0}
+
+/* 글 상세 */
+.post{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:56px;padding:44px 0 96px}
+.crumbs{font-size:14px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-bottom:22px}
+.crumbs a{color:var(--muted)}
+.post h1{font-size:clamp(25px,3.4vw,34px);line-height:1.35;letter-spacing:-.02em;margin:0 0 16px;font-weight:700;max-width:24em}
+.meta{display:flex;gap:16px;font-size:14px;color:var(--muted);flex-wrap:wrap;margin-bottom:36px}
+.symptom{background:var(--error-bg);border-radius:10px;padding:22px 24px;margin:0 0 44px}
+.symptom .k{font-size:14px;color:var(--error);font-weight:500;margin-bottom:8px;display:flex;gap:10px;align-items:center}
+.symptom .msg{font:500 clamp(17px,2.2vw,21px)/1.5 var(--mono);color:var(--ink);margin:0;word-break:break-word}
+.symptom details{margin-top:14px;font-size:14px}
+.symptom summary{cursor:pointer;color:var(--muted)}
+.symptom pre{margin:10px 0 0;font:400 13px/1.6 var(--mono);color:var(--muted);white-space:pre-wrap}
+.step{display:grid;grid-template-columns:40px 1fr;gap:0 8px;margin-bottom:40px}
+.step .n{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;font-size:14px;font-weight:500}
+.step.fix .n{background:var(--fix);border-color:var(--fix);color:var(--paper)}
+.step h2{margin:0 0 8px;font-size:21px;font-weight:700;line-height:1.4}
+.step p{margin:0 0 14px;max-width:38em}
+.code{background:var(--surface);border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.code .bar{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:7px 14px;border-bottom:1px solid var(--rule)}
+.code .bar button{font:inherit;color:var(--ink);background:none;border:0;cursor:pointer;padding:0}
+.code pre{margin:0;padding:14px 16px;font:400 13.5px/1.7 var(--mono);overflow-x:auto}
+.code .c{color:var(--muted)}
+.code.fixed{border-color:var(--fix);background:var(--fix-bg)}
+.code.fixed .bar{border-color:color-mix(in srgb,var(--fix) 40%,transparent)}
+.shot{border:1px dashed var(--rule);border-radius:8px;padding:28px;text-align:center;color:var(--muted);font-size:14px}
+aside.toc{position:sticky;top:76px;align-self:start;font-size:14px}
+aside.toc h2{font-size:14px;font-weight:500;margin:0 0 10px;color:var(--muted)}
+aside.toc ol{list-style:none;margin:0 0 28px;padding:0;border-left:1px solid var(--rule)}
+aside.toc li a{display:block;padding:4px 0 4px 14px;text-decoration:none;color:var(--muted)}
+aside.toc li a[aria-current]{color:var(--ink);border-left:2px solid var(--ink);margin-left:-1px;padding-left:13px}
+.related a{display:block;text-decoration:none;color:var(--ink);margin-bottom:10px;line-height:1.5}
+
+footer.site{border-top:1px solid var(--rule);padding:24px 0 40px;font-size:14px;color:var(--muted)}
+
+[hidden]{display:none!important}
+@media (max-width:760px){
+  .wrap{padding:0 16px}
+  nav.main{margin-left:0;width:100%;gap:16px}
+  .hero{padding:40px 0 20px}
+  .month{grid-template-columns:1fr}
+  .month>h2{margin-bottom:6px}
+  .post{grid-template-columns:1fr;gap:0;padding-top:28px}
+  aside.toc{position:static}
+  .step{grid-template-columns:1fr}
+  .step .n{margin-bottom:8px}
+  .count{margin-left:0;width:100%}
+}
+@media (prefers-reduced-motion:no-preference){
+  .entry{transition:opacity .15s}
+}
+</style>
+</head>
+<body>
+
+<div class="proto" role="region" aria-label="시안 보기 전환">
+  <div class="wrap">
+    <strong>디자인 시안: 에러 기록장</strong>
+    <button type="button" data-view="home" aria-pressed="true">홈</button>
+    <button type="button" data-view="post" aria-pressed="false">글 상세</button>
+    <button type="button" id="theme" aria-pressed="false">다크 모드</button>
+  </div>
+</div>
+
+<header class="site">
+  <div class="wrap">
+    <a class="logo" href="#" data-go="home">jjh<span>개발하다 만난 에러 기록</span></a>
+    <nav class="main" aria-label="주요 메뉴">
+      <a href="#" aria-current="page">기록</a>
+      <a href="#">카테고리</a>
+      <a href="#">태그</a>
+      <a href="#">소개</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ 홈 ============ -->
+<main id="home" class="wrap">
+  <section class="hero">
+    <h1>터미널에 뜬 에러 메시지를 그대로 붙여넣어 보세요.</h1>
+    <p>직접 겪고 해결한 에러를 원인과 해결 방법까지 정리해 둡니다.</p>
+    <div class="search">
+      <label for="q" aria-hidden="true">&gt;_</label>
+      <input id="q" type="search" placeholder="npm ERR! code ECONNRESET" autocomplete="off" aria-label="에러 메시지나 키워드로 기록 찾기">
+    </div>
+    <div class="filters" role="group" aria-label="기술 스택으로 거르기">
+      <button class="chip" type="button" data-stack="" aria-pressed="true">전체</button>
+      <button class="chip" type="button" data-stack="Node.js" aria-pressed="false">Node.js<small>2</small></button>
+      <button class="chip" type="button" data-stack="Spring Boot" aria-pressed="false">Spring Boot<small>1</small></button>
+      <button class="chip" type="button" data-stack="Git" aria-pressed="false">Git<small>1</small></button>
+      <button class="chip" type="button" data-stack="Markdown" aria-pressed="false">Markdown<small>1</small></button>
+      <span class="count" id="count" aria-live="polite">기록 5개</span>
+    </div>
+  </section>
+
+  <section class="log" id="log" aria-label="기록 목록"></section>
+</main>
+
+<!-- ============ 글 상세 ============ -->
+<main id="post" class="wrap" hidden>
+  <div class="post">
+    <article>
+      <div class="crumbs"><a href="#" data-go="home">기록 목록으로</a><span>Spring Boot</span><span>error</span></div>
+      <h1>Spring Boot 첫 실행 시 DataSource 설정 에러</h1>
+      <div class="meta"><time datetime="2024-03-24">2024년 3월 24일</time><span>읽는 데 2분</span></div>
+
+      <section class="symptom" id="s1" aria-labelledby="sym-k">
+        <div class="k" id="sym-k">이런 에러가 났다면</div>
+        <p class="msg">Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured.</p>
+        <details>
+          <summary>전체 로그 보기</summary>
+<pre>***************************
+APPLICATION FAILED TO START
+***************************
+
+Reason: Failed to determine a suitable driver class
+
+Action:
+  If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
+  If you have database settings to be loaded from a particular profile you may need to activate it.</pre>
+        </details>
+      </section>
+
+      <section class="step" id="s2">
+        <div class="n">1</div>
+        <div>
+          <h2>원인</h2>
+          <p>DB에 연결할 정보가 없거나 잘못되어 있습니다. Spring Boot 프로젝트를 처음 만들고 설정을 고치지 않은 채 바로 실행하면 이 에러가 납니다.</p>
+        </div>
+      </section>
+
+      <section class="step fix" id="s3">
+        <div class="n">2</div>
+        <div>
+          <h2>해결</h2>
+          <p><code style="font-family:var(--mono);font-size:.9em">application.properties</code>에 DB 연결 정보를 적어 줍니다.</p>
+          <div class="code fixed">
+            <div class="bar"><span>application.properties</span><button type="button" class="copy">복사</button></div>
+<pre>spring.datasource.url=jdbc:mysql://localhost:3306/<span class="c">[스키마명]</span>
+spring.datasource.username=<span class="c">[접속 ID]</span>
+spring.datasource.password=<span class="c">[접속 비밀번호]</span>
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="step" id="s4">
+        <div class="n">3</div>
+        <div>
+          <h2>결과</h2>
+          <p>서버가 정상적으로 뜹니다. 화면에 Whitelabel Error Page가 보이는 건 아직 컨트롤러가 없어 404가 나는 것이라 정상입니다.</p>
+          <div class="shot">실행 결과 스크린샷</div>
+        </div>
+      </section>
+    </article>
+
+    <aside class="toc">
+      <h2>이 글의 순서</h2>
+      <ol>
+        <li><a href="#s1" aria-current="true">에러 메시지</a></li>
+        <li><a href="#s2">원인</a></li>
+        <li><a href="#s3">해결</a></li>
+        <li><a href="#s4">결과</a></li>
+      </ol>
+      <h2>같은 스택의 다른 기록</h2>
+      <div class="related"><a href="#" data-go="home">아직 없습니다. 목록에서 다른 에러를 찾아보세요.</a></div>
+    </aside>
+  </div>
+</main>
+
+<footer class="site"><div class="wrap">© 2024 jjh. Jekyll로 만들었습니다.</div></footer>
+
+<script>
+const posts=[
+  {y:"2024.03",d:"24",stack:"Spring Boot",title:"Spring Boot 첫 실행 시 DataSource 설정 에러",err:"Failed to configure a DataSource: 'url' attribute is not specified",post:true},
+  {y:"2024.03",d:"19",stack:"Markdown",title:"마크다운 코드 블록에 언어 지정하기",note:"```bash, ```java 처럼 언어를 붙이는 법과 지원 언어 목록"},
+  {y:"2024.03",d:"19",stack:"Git",title:"이미 한 커밋의 메시지 수정하기",note:"push 전에는 git commit --amend, push 후에는 강제 push까지"},
+  {y:"2023.11",d:"06",stack:"Node.js",title:"create-react-app 설치 중 ECONNRESET",err:"npm ERR! code ECONNRESET  npm ERR! network Invalid response body"},
+  {y:"2023.11",d:"06",stack:"Node.js",title:"npm 레지스트리 연결 실패 (errno -4077)",err:"all connections to the npm registry must use TLS 1.2 or higher"}
+];
+const esc=s=>s.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hl=(s,q)=>{if(!q)return esc(s);const i=s.toLowerCase().indexOf(q.toLowerCase());if(i<0)return esc(s);return esc(s.slice(0,i))+"<mark>"+esc(s.slice(i,i+q.length))+"</mark>"+esc(s.slice(i+q.length))};
+let stack="";const q=document.getElementById("q");
+function render(){
+  const term=q.value.trim();
+  const list=posts.filter(p=>(!stack||p.stack===stack)&&(!term||[p.title,p.err||"",p.note||"",p.stack].join(" ").toLowerCase().includes(term.toLowerCase())));
+  document.getElementById("count").textContent="기록 "+list.length+"개";
+  const log=document.getElementById("log");
+  if(!list.length){log.innerHTML='<p class="empty">일치하는 기록이 없습니다. 메시지에서 핵심 단어만 남기거나 <button type="button" id="reset">검색 초기화</button>해 보세요.</p>';document.getElementById("reset").onclick=()=>{q.value="";stack="";syncChips();render()};return}
+  const g={};list.forEach(p=>(g[p.y]=g[p.y]||[]).push(p));
+  log.innerHTML=Object.keys(g).map(y=>`<div class="month"><h2>${y}</h2><div>${g[y].map(p=>`
+    <a class="entry" href="#" ${p.post?'data-go="post"':''}>
+      <span class="day">${p.d}</span>
+      <span><span class="stack">${p.stack}</span><h3>${hl(p.title,term)}</h3>
+      ${p.err?`<code>${hl(p.err,term)}</code>`:`<code class="note">${hl(p.note,term)}</code>`}</span>
+    </a>`).join("")}</div></div>`).join("");
+}
+function syncChips(){document.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.stack===stack))}
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{stack=c.dataset.stack;syncChips();render()});
+q.addEventListener("input",render);
+function show(v){document.getElementById("home").hidden=v!=="home";document.getElementById("post").hidden=v!=="post";
+  document.querySelectorAll("[data-view]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===v));window.scrollTo(0,0)}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>show(b.dataset.view));
+document.addEventListener("click",e=>{const a=e.target.closest("[data-go]");if(a){e.preventDefault();show(a.dataset.go)}});
+document.getElementById("theme").onclick=e=>{const dark=e.currentTarget.getAttribute("aria-pressed")!=="true";
+  document.documentElement.dataset.theme=dark?"dark":"light";e.currentTarget.setAttribute("aria-pressed",dark)};
+document.querySelectorAll(".copy").forEach(b=>b.onclick=()=>{const t=b.closest(".code").querySelector("pre").innerText;
+  navigator.clipboard?.writeText(t).catch(()=>{});b.textContent="복사됨";setTimeout(()=>b.textContent="복사",1500)});
+render();
+</script>
+</body>
+</html>

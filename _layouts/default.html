@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'ko-KR' }}">
+{% include head.html %}
+<body>
+  <a class="skip" href="#content">본문으로 건너뛰기</a>
+
+  <div class="band{% unless page.layout == 'home' %} slim{% endunless %}">
+    <header class="site">
+      <div class="wrap">
+        <a class="logo" href="{{ '/' | relative_url }}"><img src="{{ site.avatar | relative_url }}" alt="" width="38" height="38"><b>{{ site.title }}</b></a>
+        <nav class="main" aria-label="주요 메뉴">
+          <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}aria-current="page"{% endif %}>글</a>
+          <a href="{{ '/categories/' | relative_url }}" {% if page.url == '/categories/' %}aria-current="page"{% endif %}>카테고리</a>
+          <a href="{{ '/tags/' | relative_url }}" {% if page.url == '/tags/' %}aria-current="page"{% endif %}>태그</a>
+          <a href="{{ '/about/' | relative_url }}" {% if page.url == '/about/' %}aria-current="page"{% endif %}>소개</a>
+          <button type="button" class="mode" id="theme-toggle" aria-pressed="false">밤 모드</button>
+        </nav>
+      </div>
+    </header>
+    {%- if page.layout == 'home' %}
+    {% include home-hero.html %}
+    {%- elsif page.layout == 'post' %}
+    {% include post-head.html %}
+    {%- elsif page.title %}
+    <div class="page-head wrap"><h1>{{ page.title }}</h1></div>
+    {%- endif %}
+  </div>
+
+  <main id="content" class="wrap">
+    {{ content }}
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <div>
+        <span>© {{ site.time | date: '%Y' }} {{ site.author.name }}</span>
+        <a href="{{ site.author.portfolio }}">포트폴리오</a>
+        <a href="https://github.com/{{ site.author.github }}">GitHub</a>
+        <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ '/assets/js/main.js' | relative_url }}" defer></script>
+</body>
+</html>

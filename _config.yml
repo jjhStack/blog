@@ -1,0 +1,85 @@
+# 사이트 설정
+
+lang: ko-KR
+timezone: Asia/Seoul
+
+title: jjh.log
+tagline: 개발하고 배우고 남기는 기록
+description: >-
+  jjh의 개인 기록장. 개발하다 만난 에러와 새로 배운 것, 그날그날의 생각을 적어 둡니다.
+
+# GitHub Pages 주소: https://jjhstack.github.io/blog
+url: "https://jjhstack.github.io"
+baseurl: "/blog"
+
+author:
+  name: jjh
+  email: jjh.stack@gmail.com
+  github: jjhStack
+  portfolio: https://jjhstack.github.io/
+
+avatar: /assets/img/commons/avatar.jpg
+
+# jekyll-seo-tag
+social:
+  name: jjh
+  links:
+    - https://github.com/jjhStack
+    - https://jjhstack.github.io/
+
+webmaster_verifications:
+  google: 3kVrr2D7wi2reNu_80rXvOUsOsmGq122CIFkNQr8o3k
+
+analytics:
+  google: G-XFGFJR46B9
+
+adsense:
+  client: ca-pub-6491984042934631
+
+comments:
+  disqus: jjdev93 # Disqus 계정 이름. 바꾸면 기존 댓글이 사라지므로 유지
+
+# 빌드
+markdown: kramdown
+highlighter: rouge
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: highlight
+    block:
+      line_numbers: false
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+  - jekyll-sitemap
+
+feed:
+  path: feed.xml
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      comments: true
+      permalink: /posts/:title/
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: page
+
+exclude:
+  - _design
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .vscode
+  - .github
+  - .editorconfig
+  - .markdownlint.json

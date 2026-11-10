@@ -1,0 +1,62 @@
+---
+layout: default
+---
+{%- capture stack -%}{% include stack.html post=page %}{%- endcapture -%}
+<div class="post">
+  <article>
+
+    {%- if page.error %}
+    <section class="symptom" aria-labelledby="symptom-label">
+      <div class="k" id="symptom-label">이런 에러가 났다면</div>
+      <p class="msg">{{ page.error | escape }}</p>
+    </section>
+    {%- endif %}
+
+    <div class="prose">
+      {{ content }}
+    </div>
+
+    {%- if page.tags.size > 0 %}
+    <div class="tags">
+      {%- for t in page.tags %}
+      <a href="{{ '/tags/' | relative_url }}#{{ t | slugify }}">{{ t }}</a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+
+    <nav class="pager" aria-label="이전 글과 다음 글">
+      {%- if page.previous %}
+      <a href="{{ page.previous.url | relative_url }}"><small>이전 글</small>{{ page.previous.title }}</a>
+      {%- else %}<span></span>{%- endif %}
+      {%- if page.next %}
+      <a class="next" href="{{ page.next.url | relative_url }}"><small>다음 글</small>{{ page.next.title }}</a>
+      {%- endif %}
+    </nav>
+
+    {%- if page.comments and site.comments.disqus and jekyll.environment == 'production' %}
+    {% include disqus.html %}
+    {%- endif %}
+  </article>
+
+  <aside class="toc" aria-label="이 글의 목차">
+    <div id="toc" hidden>
+      <h2>목차</h2>
+      <ol></ol>
+    </div>
+    {%- assign related = '' | split: '' -%}
+    {%- for p in site.posts -%}
+      {%- if p.url != page.url -%}
+        {%- capture ps -%}{% include stack.html post=p %}{%- endcapture -%}
+        {%- if ps == stack -%}{%- assign related = related | push: p -%}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if related.size > 0 %}
+    <h2>비슷한 글</h2>
+    <div class="related">
+      {%- for p in related limit: 4 %}
+      <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </aside>
+</div>

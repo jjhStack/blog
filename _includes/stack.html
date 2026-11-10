@@ -1,0 +1,10 @@
+{%- comment -%}
+  글의 기술 스택 이름. 카테고리 중 'error'를 뺀 마지막 항목을 쓴다.
+  사용: {% include stack.html post=post %}
+{%- endcomment -%}
+{%- assign _stack = '' -%}
+{%- for c in include.post.categories -%}
+  {%- assign _lc = c | downcase -%}
+  {%- unless _lc == 'error' -%}{%- assign _stack = c -%}{%- endunless -%}
+{%- endfor -%}
+{{- _stack -}}
