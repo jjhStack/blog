@@ -1,6 +1,7 @@
 ---
 title: "[Node.js] errno -4077 all connections to the npm registry"
 date: 2023-11-06 13:23:00 +09:00
+error: "npm notice Beginning October 4, 2021, all connections to the npm registry - including for package installation - must use TLS 1.2 or higher."
 categories: [Node.js, error]
 tags: [Node.js,error,npm]
 render_with_liquid: false

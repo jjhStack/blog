@@ -1,149 +1,62 @@
 ---
 layout: default
-refactor: true
-panel_includes:
-  - toc
-tail_includes:
-  - related-posts
-  - post-nav
-  - comments
 ---
+{%- capture stack -%}{% include stack.html post=page %}{%- endcapture -%}
+<div class="post">
+  <article>
 
-{% include lang.html %}
+    {%- if page.error %}
+    <section class="symptom" aria-labelledby="symptom-label">
+      <div class="k" id="symptom-label">이런 에러가 났다면</div>
+      <p class="msg">{{ page.error | escape }}</p>
+    </section>
+    {%- endif %}
 
-<article class="px-1">
-  <header>
-    <h1 data-toc-skip>{{ page.title }}</h1>
-
-    <div class="post-meta text-muted">
-      <!-- published date -->
-      <span>
-        {{ site.data.locales[lang].post.posted }}
-        {% include datetime.html date=page.date tooltip=true lang=lang %}
-      </span>
-
-      <!-- lastmod date -->
-      {% if page.last_modified_at and page.last_modified_at != page.date %}
-        <span>
-          {{ site.data.locales[lang].post.updated }}
-          {% include datetime.html date=page.last_modified_at tooltip=true lang=lang %}
-        </span>
-      {% endif %}
-
-      {% if page.image %}
-        {% capture src %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
-        {% capture class %}class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}"{% endcapture %}
-        {% capture alt %}alt="{{ page.image.alt | xml_escape | default: "Preview Image" }}"{% endcapture %}
-
-        {% if page.image.lqip %}
-          {%- capture lqip -%}lqip="{{ page.image.lqip }}"{%- endcapture -%}
-        {% endif %}
-
-        <div class="mt-3 mb-3">
-          <img {{ src }} {{ class }} {{ alt }} w="1200" h="630" {{ lqip }}>
-          {%- if page.image.alt -%}
-            <figcaption class="text-center pt-2 pb-2">{{ page.image.alt }}</figcaption>
-          {%- endif -%}
-        </div>
-      {% endif %}
-
-      <div class="d-flex justify-content-between">
-        <!-- author(s) -->
-        <span>
-          {% if page.author %}
-            {% assign authors = page.author %}
-          {% elsif page.authors %}
-            {% assign authors = page.authors %}
-          {% endif %}
-
-          {{ site.data.locales[lang].post.written_by }}
-
-          <em>
-            {% if authors %}
-              {% for author in authors %}
-                {% if site.data.authors[author].url -%}
-                  <a href="{{ site.data.authors[author].url }}">{{ site.data.authors[author].name }}</a>
-                {%- else -%}
-                  {{ site.data.authors[author].name }}
-                {%- endif %}
-                {% unless forloop.last %}{{ '</em>, <em>' }}{% endunless %}
-              {% endfor %}
-            {% else %}
-              <a href="{{ site.social.links[0] }}">{{ site.social.name }}</a>
-            {% endif %}
-          </em>
-        </span>
-
-        <div>
-          <!-- pageviews -->
-          {% if site.pageviews.provider and site.analytics[site.pageviews.provider].id %}
-            <span>
-              <em id="pageviews">
-                <i class="fas fa-spinner fa-spin small"></i>
-              </em>
-              {{ site.data.locales[lang].post.pageview_measure }}
-            </span>
-          {% endif %}
-
-          <!-- read time -->
-          {% include read-time.html content=content prompt=true lang=lang %}
-        </div>
-      </div>
+    <div class="prose">
+      {{ content }}
     </div>
-  </header>
 
-  <div class="content">
-    {{ content }}
-  </div>
-
-  <div class="post-tail-wrapper text-muted">
-    <!-- categories -->
-    {% if page.categories.size > 0 %}
-      <div class="post-meta mb-3">
-        <i class="far fa-folder-open fa-fw me-1"></i>
-        {% for category in page.categories %}
-          <a href="{{ site.baseurl }}/categories/{{ category | slugify | url_encode }}/">{{ category }}</a>
-          {%- unless forloop.last -%},{%- endunless -%}
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <!-- tags -->
-    {% if page.tags.size > 0 %}
-      <div class="post-tags">
-        <i class="fa fa-tags fa-fw me-1"></i>
-        {% for tag in page.tags %}
-          <a
-            href="{{ site.baseurl }}/tags/{{ tag | slugify | url_encode }}/"
-            class="post-tag no-text-decoration"
-          >
-            {{- tag -}}
-          </a>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <div
-      class="
-        post-tail-bottom
-        d-flex justify-content-between align-items-center mt-5 pb-2
-      "
-    >
-      <div class="license-wrapper">
-        {% if site.data.locales[lang].copyright.license.template %}
-          {% capture _replacement %}
-        <a href="{{ site.data.locales[lang].copyright.license.link }}">
-          {{ site.data.locales[lang].copyright.license.name }}
-        </a>
-        {% endcapture %}
-
-          {{ site.data.locales[lang].copyright.license.template | replace: ':LICENSE_NAME', _replacement }}
-        {% endif %}
-      </div>
-
-      {% include post-sharing.html lang=lang %}
+    {%- if page.tags.size > 0 %}
+    <div class="tags">
+      {%- for t in page.tags %}
+      <a href="{{ '/tags/' | relative_url }}#{{ t | slugify }}">{{ t }}</a>
+      {%- endfor %}
     </div>
-    <!-- .post-tail-bottom -->
-  </div>
-  <!-- div.post-tail-wrapper -->
-</article>
+    {%- endif %}
+
+    <nav class="pager" aria-label="이전 글과 다음 글">
+      {%- if page.previous %}
+      <a href="{{ page.previous.url | relative_url }}"><small>이전 글</small>{{ page.previous.title }}</a>
+      {%- else %}<span></span>{%- endif %}
+      {%- if page.next %}
+      <a class="next" href="{{ page.next.url | relative_url }}"><small>다음 글</small>{{ page.next.title }}</a>
+      {%- endif %}
+    </nav>
+
+    {%- if page.comments and site.comments.disqus and jekyll.environment == 'production' %}
+    {% include disqus.html %}
+    {%- endif %}
+  </article>
+
+  <aside class="toc" aria-label="이 글의 목차">
+    <div id="toc" hidden>
+      <h2>목차</h2>
+      <ol></ol>
+    </div>
+    {%- assign related = '' | split: '' -%}
+    {%- for p in site.posts -%}
+      {%- if p.url != page.url -%}
+        {%- capture ps -%}{% include stack.html post=p %}{%- endcapture -%}
+        {%- if ps == stack -%}{%- assign related = related | push: p -%}{%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+    {%- if related.size > 0 %}
+    <h2>비슷한 글</h2>
+    <div class="related">
+      {%- for p in related limit: 4 %}
+      <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+      {%- endfor %}
+    </div>
+    {%- endif %}
+  </aside>
+</div>

@@ -1,6 +1,7 @@
 ---
 title: "[마크다운, Markdown] 코드 블록(code block)"
-date: 2024-03-19 16:21:SS +09:00
+date: 2024-03-19 16:21:00 +09:00
+description: "코드 블록에 언어를 지정하는 방법과 지정할 수 있는 언어 목록"
 categories: [ETC, Markdown]
 tags: [markdown, md]
 render_with_liquid: false

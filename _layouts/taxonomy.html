@@ -1,0 +1,25 @@
+---
+layout: default
+---
+{%- if page.kind == 'tags' -%}
+  {%- assign groups = site.tags | sort -%}
+{%- else -%}
+  {%- assign groups = site.categories | sort -%}
+{%- endif -%}
+<article class="page">
+  <nav class="index" aria-label="{{ page.title }} 목록">
+    {%- for g in groups %}
+    <a href="#{{ g[0] | slugify }}">{{ g[0] }}<small>{{ g[1].size }}</small></a>
+    {%- endfor %}
+  </nav>
+  {%- for g in groups %}
+  <section class="group" id="{{ g[0] | slugify }}">
+    <h2>{{ g[0] }}</h2>
+    <ul>
+      {%- for post in g[1] %}
+      <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a><span class="dots" aria-hidden="true"></span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%Y.%m.%d' }}</time></li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endfor %}
+</article>

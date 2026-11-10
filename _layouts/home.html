@@ -1,118 +1,47 @@
 ---
 layout: default
-refactor: true
 ---
+{%- assign stacks = '' -%}
+{%- for post in site.posts -%}
+  {%- capture s -%}{% include stack.html post=post %}{%- endcapture -%}
+  {%- assign stacks = stacks | append: s | append: '|' -%}
+{%- endfor -%}
+{%- assign all_stacks = stacks | split: '|' -%}
+{%- assign unique_stacks = all_stacks | uniq | sort_natural -%}
 
-{% include lang.html %}
-
-{% assign pinned = site.posts | where: 'pin', 'true' %}
-{% assign default = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
-
-{% assign posts = '' | split: '' %}
-
-<!-- Get pinned posts -->
-
-{% assign offset = paginator.page | minus: 1 | times: paginator.per_page %}
-{% assign pinned_num = pinned.size | minus: offset %}
-
-{% if pinned_num > 0 %}
-  {% for i in (offset..pinned.size) limit: pinned_num %}
-    {% assign posts = posts | push: pinned[i] %}
-  {% endfor %}
-{% else %}
-  {% assign pinned_num = 0 %}
-{% endif %}
-
-<!-- Get default posts -->
-
-{% assign default_beg = offset | minus: pinned.size %}
-
-{% if default_beg < 0 %}
-  {% assign default_beg = 0 %}
-{% endif %}
-
-{% assign default_num = paginator.posts | size | minus: pinned_num %}
-{% assign default_end = default_beg | plus: default_num | minus: 1 %}
-
-{% if default_num > 0 %}
-  {% for i in (default_beg..default_end) %}
-    {% assign posts = posts | push: default[i] %}
-  {% endfor %}
-{% endif %}
-
-<div id="post-list" class="flex-grow-1 px-xl-1">
-  {% for post in posts %}
-    <article class="card-wrapper card">
-      <a href="{{ post.url | relative_url }}" class="post-preview row g-0 flex-md-row-reverse">
-        {% assign card_body_col = '12' %}
-
-        {% if post.image %}
-          {% assign src = post.image.path | default: post.image %}
-          {% unless src contains '//' %}
-            {% assign src = post.img_path | append: '/' | append: src | replace: '//', '/' %}
-          {% endunless %}
-
-          {% assign alt = post.image.alt | xml_escape | default: 'Preview Image' %}
-
-          {% assign lqip = null %}
-
-          {% if post.image.lqip %}
-            {% capture lqip %}lqip="{{ post.image.lqip }}"{% endcapture %}
-          {% endif %}
-
-          <div class="col-md-5">
-            <img src="{{ src }}" alt="{{ alt }}" {{ lqip }}>
-          </div>
-
-          {% assign card_body_col = '7' %}
-        {% endif %}
-
-        <div class="col-md-{{ card_body_col }}">
-          <div class="card-body d-flex flex-column">
-            <h1 class="card-title my-2 mt-md-0">{{ post.title }}</h1>
-
-            <div class="card-text content mt-0 mb-3">
-              <p>
-                {% include no-linenos.html content=post.content %}
-                {{ content | markdownify | strip_html | truncate: 200 | escape }}
-              </p>
-            </div>
-
-            <div class="post-meta flex-grow-1 d-flex align-items-end">
-              <div class="me-auto">
-                <!-- posted date -->
-                <i class="far fa-calendar fa-fw me-1"></i>
-                {% include datetime.html date=post.date lang=lang %}
-
-                <!-- categories -->
-                {% if post.categories.size > 0 %}
-                  <i class="far fa-folder-open fa-fw me-1"></i>
-                  <span class="categories">
-                    {% for category in post.categories %}
-                      {{ category }}
-                      {%- unless forloop.last -%},{%- endunless -%}
-                    {% endfor %}
-                  </span>
-                {% endif %}
-              </div>
-
-              {% if post.pin %}
-                <div class="pin ms-1">
-                  <i class="fas fa-thumbtack fa-fw"></i>
-                  <span>{{ site.data.locales[lang].post.pin_prompt }}</span>
-                </div>
-              {% endif %}
-            </div>
-            <!-- .post-meta -->
-          </div>
-          <!-- .card-body -->
-        </div>
-      </a>
-    </article>
-  {% endfor %}
+<div class="filters" role="group" aria-label="주제로 거르기">
+    <button class="chip" type="button" data-stack="" aria-pressed="true">전체</button>
+    {%- for s in unique_stacks %}
+      {%- assign n = 0 -%}
+      {%- for x in all_stacks -%}{%- if x == s -%}{%- assign n = n | plus: 1 -%}{%- endif -%}{%- endfor %}
+    <button class="chip" type="button" data-stack="{{ s | escape }}" aria-pressed="false">{{ s }}<small>{{ n }}</small></button>
+    {%- endfor %}
+    <span class="count" id="count" aria-live="polite">글 {{ site.posts.size }}편</span>
 </div>
-<!-- #post-list -->
 
-{% if paginator.total_pages > 1 %}
-  {% include post-paginator.html %}
-{% endif %}
+<section class="log" id="log" aria-label="글 목록">
+  {%- assign months = site.posts | group_by_exp: 'p', "p.date | date: '%Y.%m'" -%}
+  {%- for m in months %}
+  <div class="month">
+    <h2>{{ m.items[0].date | date: '%Y년 %-m월' }}</h2>
+      {%- for post in m.items -%}
+        {%- capture stack -%}{% include stack.html post=post %}{%- endcapture -%}
+        {%- capture search_text -%}{{ post.title }} {{ post.error }} {{ post.description }} {{ post.categories | join: ' ' }} {{ post.tags | join: ' ' }} {{ post.content | strip_html | strip_newlines | truncate: 2000, '' }}{%- endcapture %}
+      <a class="entry" href="{{ post.url | relative_url }}" data-stack="{{ stack | escape }}" data-search="{{ search_text | escape }}">
+        <span class="row">
+          <span class="stack">{{ stack }}</span>
+          <h3>{{ post.title }}</h3>
+          <span class="dots" aria-hidden="true"></span>
+          <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%m.%d' }}</time>
+        </span>
+        {%- if post.error %}
+        <p class="sub"><code>{{ post.error | escape }}</code></p>
+        {%- elsif post.description %}
+        <p class="sub">{{ post.description | escape }}</p>
+        {%- endif %}
+      </a>
+      {%- endfor %}
+  </div>
+  {%- endfor %}
+  <p class="empty" id="empty" hidden>찾는 글이 없어요. 핵심 단어만 남겨 보거나 <button type="button" id="reset">검색을 초기화</button>해 보세요.</p>
+</section>

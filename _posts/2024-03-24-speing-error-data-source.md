@@ -1,6 +1,7 @@
 ---
 title: "[Spring Error] Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured."
 date: 2024-03-24 16:42:00 +09:00
+error: "Failed to configure a DataSource: 'url' attribute is not specified and no embedded datasource could be configured."
 categories: [springboot, error]
 tags: [spring,springboot,error]
 render_with_liquid: false

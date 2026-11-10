@@ -1,6 +1,7 @@
 ---
 title: "[Git] 커밋 메세지 수정 방법(changing commit message)"
-date: 2024-03-19 YY:MM:SS +09:00
+date: 2024-03-19 15:00:00 +09:00
+description: "push 전후로 나눠서 이미 한 커밋의 메시지를 고치는 방법"
 categories: [형상관리, git]
 tags: [git]
 render_with_liquid: false
