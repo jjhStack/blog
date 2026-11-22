@@ -1,6 +1,6 @@
 ---
 title: "[Java] Scanner 클래스 정리"
-date: 2026-11-22 17:30:00 +01:00
+date: 2026-11-21 09:30:00 +01:00
 description: "Scanner의 토큰과 줄 개념, 주요 메서드, nextInt() 다음 nextLine() 함정, BufferedReader와의 차이"
 categories: [Java]
 tags: [Java]
