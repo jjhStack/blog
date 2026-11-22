@@ -37,12 +37,14 @@ Scanner를 이해하는 데 가장 중요한 개념이다.
 
 |메서드|읽는 것|반환 타입|
 |---|---|---|
-|`next()`|토큰 하나|`String`|
-|`nextInt()`|토큰 하나를 정수로|`int`|
-|`nextLong()`|토큰 하나를 long으로|`long`|
-|`nextDouble()`|토큰 하나를 실수로|`double`|
-|`nextBoolean()`|토큰 하나를 boolean으로|`boolean`|
-|`nextLine()`|줄 전체 (줄바꿈 전까지)|`String`|
+|`next()`|바로 다음 토큰 하나|`String`|
+|`nextInt()`|바로 다음 토큰을 정수로 해석 (안 되면 예외)|`int`|
+|`nextLong()`|바로 다음 토큰을 long으로 해석 (안 되면 예외)|`long`|
+|`nextDouble()`|바로 다음 토큰을 실수로 해석 (안 되면 예외)|`double`|
+|`nextBoolean()`|바로 다음 토큰을 boolean으로 해석 (안 되면 예외)|`boolean`|
+|`nextLine()`|현재 위치부터 줄 끝까지 (줄바꿈 전까지)|`String`|
+
+`nextInt()`는 **다음 정수를 찾아 주는 메서드가 아니다.** 바로 다음 토큰 하나를 꺼내서 `int`로 바꿔 보는 메서드다. 자세한 동작은 아래 [타입이 안 맞는 토큰을 만나면](#타입이-안-맞는-토큰을-만나면)에 정리했다.
 
 ## 확인 메서드
 
@@ -66,6 +68,47 @@ if (sc.hasNextInt()) {
 } else {
     System.out.println("정수가 아닙니다");
 }
+```
+
+# 타입이 안 맞는 토큰을 만나면
+
+`nextInt()`는 뒤에서 정수를 찾아 건너뛰지 않는다. 입력이 `ddd 1 101.1101`이면 첫 토큰 `ddd`를 정수로 바꾸려다 실패한다.
+
+```java
+Scanner sc = new Scanner("ddd 1 101.1101");
+sc.nextInt();      // InputMismatchException: "ddd"는 정수가 아니다
+```
+
+실패한 토큰은 **소비되지 않고 그 자리에 남는다.** 그래서 예외를 잡고 다시 `nextInt()`를 불러도 또 `ddd`에서 실패한다. 건너뛰려면 `next()`로 직접 꺼내 버려야 한다.
+
+직접 실행해 본 결과다.
+
+|순서|호출|결과|
+|---|---|---|
+|1|`nextInt()`|`InputMismatchException` (`ddd`는 남아 있다)|
+|2|`next()`|`"ddd"`|
+|3|`nextInt()`|`1`|
+|4|`nextInt()`|`InputMismatchException` (`101.1101`은 정수가 아니다)|
+|5|`nextDouble()`|`101.1101`|
+
+반대로 `nextDouble()`은 `1` 같은 정수 토큰도 읽는다(`1.0`). 정수는 실수로 해석할 수 있기 때문이다.
+
+정말로 "다음 정수"를 찾고 싶다면 `hasNextInt()`로 확인하면서 아닌 토큰을 버린다.
+
+```java
+Scanner sc = new Scanner("ddd 1 101.1101");
+while (sc.hasNext() && !sc.hasNextInt()) {
+    sc.next();                 // 정수가 아닌 토큰은 버린다
+}
+int n = sc.nextInt();          // 1
+```
+
+## nextDouble()과 로케일
+
+숫자를 해석하는 규칙은 Scanner의 로케일을 따른다. 기본 로케일이 `en_US`면 `3.1415`를 읽지만, 소수점으로 쉼표를 쓰는 로케일(예: `pt-PT`)에서는 `3.1415`가 `InputMismatchException`이 된다. 환경에 따라 결과가 달라질 수 있으면 로케일을 고정한다.
+
+```java
+Scanner sc = new Scanner(System.in).useLocale(Locale.US);
 ```
 
 # nextInt() 다음 nextLine() 함정
@@ -143,7 +186,8 @@ while ((line = br.readLine()) != null) {   // EOF면 null
 |---|---|
 |token / delimiter|토큰 / 구분자|
 |parse|문자열을 특정 타입으로 해석하다|
-|InputMismatchException|타입이 맞지 않을 때 나는 예외|
+|InputMismatchException|타입이 맞지 않을 때 나는 예외. 실패한 토큰은 소비되지 않는다|
+|locale|숫자 형식(소수점, 천 단위 구분자)을 정하는 지역 설정|
 |NoSuchElementException|읽을 요소가 없을 때 나는 예외|
 |leftover newline|`nextInt()` 뒤에 남는 줄바꿈|
 |buffered I/O|버퍼를 사용하는 입출력|
