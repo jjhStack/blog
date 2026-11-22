@@ -3,7 +3,7 @@ title: "[HackerRank] End-of-file"
 date: 2026-11-22 17:35:00 +01:00
 description: "줄 수를 모르는 입력을 EOF까지 읽고 줄 번호를 붙여 출력하기. 두 번 틀리면서 배운 것"
 categories: [HackerRank, Java]
-tags: [java, hackerrank, 알고리즘, 코딩테스트, eof, end-of-file, 표준입력, stdin, system.in, scanner, hasnextline, nextline, while, 반복문, args, 명령줄 인자, off-by-one, nosuchelementexception]
+tags: [Java, 알고리즘, HackerRank]
 render_with_liquid: false
 ---
 
