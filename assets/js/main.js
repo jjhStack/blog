@@ -134,9 +134,12 @@
     var heads = Array.prototype.slice.call(prose.querySelectorAll('h1, h2'));
     if (heads.length >= 2) {
       var list = toc.querySelector('ol');
+      // 글에 h1이 없으면 h2가 최상위 단계
+      var topTag = heads.some(function (h) { return h.tagName === 'H1'; }) ? 'H1' : 'H2';
       var links = heads.map(function (h, i) {
         if (!h.id) h.id = 'section-' + (i + 1);
         var li = document.createElement('li');
+        li.className = h.tagName === topTag ? 'lv-1' : 'lv-2';
         var a = document.createElement('a');
         a.href = '#' + h.id;
         a.textContent = h.textContent;
