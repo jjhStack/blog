@@ -169,6 +169,7 @@ nav.main a[aria-current] { color: var(--band-ink); background: color-mix(in srgb
 .prose th, .prose td { border-bottom: 1.5px solid var(--rule); padding: 6px 16px 6px 0; text-align: left; }
 .prose th { color: var(--muted); font-weight: 400; }
 .prose :not(pre) > code { font: 400 .88em var(--mono); background: var(--surface); border: 1px solid var(--rule); border-radius: 6px; padding: 1px 6px; }
+.prose td > code { white-space: pre; } /* 표 안 코드의 연속 공백 유지 (예: printf 결과 [   42]) */
 
 /* 다른 글 첨부 카드: [[slug]] */
 .prose a.post-ref {
