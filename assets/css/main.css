@@ -145,8 +145,12 @@ nav.main a[aria-current] { color: var(--band-ink); background: color-mix(in srgb
 .prose > :first-child { margin-top: 0; }
 /* h1: 형광펜 밑줄 — 큰 단락 */
 .prose h1 {
-  font: 700 24px/1.35 var(--serif); margin: 44px 0 12px; display: table; padding: 0 4px;
-  background: linear-gradient(transparent 62%, var(--marker) 62%);
+  font: 700 24px/1.35 var(--serif); margin: 44px 0 12px; padding: 0 4px;
+  /* 배경 대신 밑줄로 칠해서 제목이 두 줄이 되어도 줄마다 글자 아래에만 칠해진다 */
+  text-decoration: underline var(--marker);
+  text-decoration-thickness: .42em;
+  text-underline-offset: -.3em;
+  text-decoration-skip-ink: none;
 }
 /* h2: 왼쪽 라떼 막대 — 하위 단락 */
 .prose h2 {
