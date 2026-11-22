@@ -1,0 +1,108 @@
+<!doctype html>
+<!--
+  블로그 공유 썸네일 원본 (1200x630).
+  수정 후 다시 만들기:
+    chrome --headless --hide-scrollbars --window-size=1200,630 --virtual-time-budget=6000 \
+      --screenshot=assets/img/og-image.png _design/og-image.html
+-->
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Gowun+Dodum&family=Nanum+Gothic+Coding:wght@400;700&display=block" rel="stylesheet">
+<style>
+  :root {
+    --moss: #3F5240; --pine: #2D3A30; --linen: #DDD5CB; --latte: #B8936E; --cocoa: #5A3412;
+    --paper: #F2EDE6; --surface: #FAF7F2; --rule: #D5CCC0; --muted: #6E6C60;
+    --fix-bg: #DCE3D6; --marker: #E9CFA8; --prompt: #D9B48C; --dim: #9AA596;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background: var(--moss); color: var(--paper);
+    font-family: "Gowun Dodum", sans-serif;
+    display: grid; grid-template-columns: 600px 1fr; padding: 64px 0 0 72px; position: relative;
+  }
+  /* 은은한 결 */
+  body::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(900px 500px at -10% 120%, rgba(184,147,110,.22), transparent 60%);
+  }
+
+  .left { position: relative; display: flex; flex-direction: column; padding-bottom: 60px; }
+  .mark { display: flex; align-items: center; gap: 14px; font: 400 22px "Nanum Gothic Coding", monospace; color: #C9CFC0; }
+  .mark i { width: 12px; height: 12px; border-radius: 50%; background: var(--latte); display: block; }
+  h1 {
+    margin-top: 40px; font: 700 112px/1 "Gowun Batang", serif; letter-spacing: -2px; color: var(--paper);
+  }
+  h1 span { color: var(--prompt); }
+  .tag { margin-top: 22px; font: 400 34px/1.4 "Gowun Batang", serif; color: #E9E2D8; }
+
+  .term {
+    margin-top: auto; width: 520px; background: var(--pine); border-radius: 10px; overflow: hidden;
+    box-shadow: 0 14px 30px rgba(0,0,0,.22);
+  }
+  .term .bar { background: #253029; padding: 11px 16px; display: flex; gap: 8px; align-items: center; }
+  .term .bar i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .term .bar i:nth-child(1) { background: #C98B6B; }
+  .term .bar i:nth-child(2) { background: var(--prompt); }
+  .term .bar i:nth-child(3) { background: #8FA58A; }
+  .term .bar b { margin-left: 10px; font: 400 15px "Nanum Gothic Coding", monospace; color: var(--dim); font-weight: 400; }
+  .term .line { padding: 18px 20px 20px; font: 400 24px "Nanum Gothic Coding", monospace; color: var(--paper); white-space: nowrap; }
+  .term .line em { font-style: normal; color: var(--prompt); margin-right: 12px; }
+  .term .line u { text-decoration: none; display: inline-block; width: 13px; height: 26px; background: var(--prompt); vertical-align: -5px; margin-left: 3px; }
+
+  /* 오른쪽: 글 목록 카드 */
+  .right { position: relative; }
+  .sheet {
+    position: absolute; left: 30px; top: 6px; width: 560px; height: 640px;
+    background: var(--paper); color: var(--pine); border-radius: 14px 0 0 0;
+    padding: 34px 88px 34px 40px; box-shadow: -10px 10px 40px rgba(0,0,0,.18);
+  }
+  .sheet h2 {
+    font: 700 22px "Gowun Batang", serif; display: flex; align-items: center; gap: 14px; margin-bottom: 6px;
+  }
+  .sheet h2::after { content: ""; flex: 1; height: 1.5px; background: var(--rule); }
+  .entry { padding: 18px 0 19px; border-bottom: 1.5px dashed var(--rule); }
+  .entry .row { display: flex; align-items: center; gap: 12px; }
+  .chip { font-size: 15px; color: var(--moss); background: var(--fix-bg); border-radius: 999px; padding: 2px 12px; }
+  .chip.err { color: var(--cocoa); background: #EBDCCB; }
+  .entry time { margin-left: auto; font: 400 16px "Nanum Gothic Coding", monospace; color: var(--muted); }
+  .entry h3 { margin-top: 9px; font: 700 23px/1.4 "Gowun Batang", serif; }
+  .entry h3 mark { background: linear-gradient(transparent 60%, var(--marker) 60%); color: inherit; padding: 0 2px; }
+</style>
+</head>
+<body>
+  <section class="left">
+    <div class="mark"><i></i>jjhstack.github.io/blog</div>
+    <h1>jjh<span>.</span>log</h1>
+    <p class="tag">개발하고 배우고 남기는 기록</p>
+    <div class="term">
+      <div class="bar"><i></i><i></i><i></i><b>jjh.log</b></div>
+      <div class="line"><em>jjh@log:~$</em>오늘 배운 것 적어 두기<u></u></div>
+    </div>
+  </section>
+
+  <section class="right" aria-hidden="true">
+    <div class="sheet">
+      <h2>최근 기록</h2>
+      <div class="entry">
+        <div class="row"><span class="chip">Java</span><time>11.23</time></div>
+        <h3>[HackerRank] <mark>End-of-file</mark></h3>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="chip">Java</span><time>11.23</time></div>
+        <h3>[Java] Scanner 클래스 정리</h3>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="chip err">Spring</span><time>03.24</time></div>
+        <h3>DataSource 설정 에러 해결</h3>
+      </div>
+      <div class="entry">
+        <div class="row"><span class="chip">Git</span><time>03.19</time></div>
+        <h3>커밋 메시지 수정 방법</h3>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

@@ -59,6 +59,15 @@ feed:
   path: feed.xml
 
 defaults:
+  # 링크 공유 썸네일 (원본: _design/og-image.html). 글에서 image: 로 따로 지정하면 그게 우선
+  - scope:
+      path: ""
+    values:
+      image:
+        path: /assets/img/og-image.png
+        width: 1200
+        height: 630
+        alt: "jjh.log - 개발하고 배우고 남기는 기록"
   - scope:
       path: ""
       type: posts
