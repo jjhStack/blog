@@ -63,30 +63,95 @@
       return hit / words.length >= 0.6;
     }
 
+    // 페이징: 검색·필터 결과를 PER_PAGE개씩 나눠 보여 준다. 검색은 항상 전체 글 대상이다.
+    var PER_PAGE = 10;
+    var pager = document.getElementById('pager');
+    var log = document.getElementById('log');
+    var page = parseInt(new URLSearchParams(location.search).get('page'), 10) || 1;
+
+    function setUrl() {
+      var url = new URL(location.href);
+      if (page > 1) url.searchParams.set('page', page); else url.searchParams.delete('page');
+      history.replaceState(null, '', url);
+    }
+
+    function pageButton(label, target, opts) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      if (opts && opts.cls) b.className = opts.cls;
+      if (opts && opts.aria) b.setAttribute('aria-label', opts.aria);
+      if (target === page && !(opts && opts.cls)) b.setAttribute('aria-current', 'page');
+      if (opts && opts.disabled) b.disabled = true;
+      b.addEventListener('click', function () {
+        page = target;
+        render();
+        log.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      return b;
+    }
+
+    // 1 … 4 5 [6] 7 8 … 20 처럼 앞뒤 일부만 보여 준다
+    function pageList(total) {
+      var out = [];
+      for (var i = 1; i <= total; i++) {
+        if (i === 1 || i === total || Math.abs(i - page) <= 1) out.push(i);
+        else if (out[out.length - 1] !== '…') out.push('…');
+      }
+      return out;
+    }
+
+    function drawPager(total) {
+      if (!pager) return;
+      pager.textContent = '';
+      pager.hidden = total <= 1;
+      if (total <= 1) return;
+      pager.appendChild(pageButton('‹ 이전', page - 1, { cls: 'step', aria: '이전 페이지', disabled: page === 1 }));
+      pageList(total).forEach(function (n) {
+        if (n === '…') {
+          var gap = document.createElement('span');
+          gap.className = 'gap';
+          gap.textContent = '…';
+          pager.appendChild(gap);
+        } else {
+          pager.appendChild(pageButton(String(n), n, { aria: n + '페이지' }));
+        }
+      });
+      pager.appendChild(pageButton('다음 ›', page + 1, { cls: 'step', aria: '다음 페이지', disabled: page === total }));
+    }
+
     function render() {
       var term = q.value.trim().toLowerCase();
-      var shown = 0;
+      var hits = [];
       entries.forEach(function (el) {
         var ok = (!stack || el.getAttribute('data-stack') === stack) && matches(el._s, term);
-        el.hidden = !ok;
-        if (ok) shown++;
+        if (ok) hits.push(el);
+        el.hidden = true;
         var h = el.querySelector('h3');
         var c = el.querySelector('.sub code') || el.querySelector('.sub');
         if (h) h.innerHTML = mark(el._h, term);
         if (c) c.innerHTML = mark(el._c, term);
       });
+      var total = Math.max(1, Math.ceil(hits.length / PER_PAGE));
+      if (page > total) page = total;
+      if (page < 1) page = 1;
+      hits.slice((page - 1) * PER_PAGE, page * PER_PAGE).forEach(function (el) { el.hidden = false; });
       document.querySelectorAll('.month').forEach(function (m) {
         m.hidden = !m.querySelector('.entry:not([hidden])');
       });
-      count.textContent = '글 ' + shown + '편';
-      empty.hidden = shown > 0;
+      count.textContent = '글 ' + hits.length + '편';
+      empty.hidden = hits.length > 0;
+      drawPager(total);
+      setUrl();
     }
 
-    q.addEventListener('input', render);
+    // 검색어나 필터가 바뀌면 첫 페이지부터
+    q.addEventListener('input', function () { page = 1; render(); });
     chips.forEach(function (chip) {
       chip.addEventListener('click', function () {
         stack = chip.getAttribute('data-stack');
         chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c === chip)); });
+        page = 1;
         render();
       });
     });
@@ -94,9 +159,11 @@
       q.value = '';
       stack = '';
       chips.forEach(function (c) { c.setAttribute('aria-pressed', String(c.getAttribute('data-stack') === '')); });
+      page = 1;
       render();
       q.focus();
     });
+    render();
   }
 
   // 글: 코드 블록에 언어 이름과 복사 버튼

@@ -121,6 +121,18 @@ nav.main a[aria-current] { color: var(--band-ink); background: color-mix(in srgb
   font: 400 13px/1.5 var(--mono); color: var(--err-ink); background: var(--err-bg);
   border-radius: 4px; padding: 3px 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+/* 글 목록 페이지 번호 */
+.pager-nums { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 6px; margin: 28px 0 8px; }
+.pager-nums[hidden] { display: none; }
+.pager-nums button {
+  font: 400 14px var(--mono); min-width: 36px; height: 36px; padding: 0 10px; cursor: pointer;
+  color: var(--ink); background: transparent; border: 1.5px solid var(--rule); border-radius: 8px;
+}
+.pager-nums button:hover:not(:disabled) { border-color: var(--latte); }
+.pager-nums button[aria-current="page"] { background: var(--latte); border-color: var(--latte); color: var(--on-latte); font-weight: 700; }
+.pager-nums button.step { font-family: var(--sans); }
+.pager-nums button:disabled { opacity: .4; cursor: default; }
+.pager-nums .gap { color: var(--muted); padding: 0 2px; }
 .empty { padding: 32px 0; color: var(--muted); }
 .empty button { font: inherit; color: var(--link); background: none; border: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; padding: 0; }
 
