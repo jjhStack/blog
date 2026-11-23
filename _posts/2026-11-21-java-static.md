@@ -1,6 +1,6 @@
 ---
 title: "[Java] static 키워드 정리"
-date: 2026-11-22 12:55:00 +01:00
+date: 2026-11-21 12:55:00 +01:00
 description: "static은 실행 순서가 아니라 '클래스에 속한다'는 뜻이다. static 변수, 메서드, 블록의 차이와 클래스 초기화 시점"
 categories: [Java]
 tags: [Java]

@@ -1,6 +1,6 @@
 ---
 title: "[Java] 입출력 클래스 비교: Scanner, BufferedReader, println, BufferedWriter"
-date: 2026-11-21 09:40:00 +01:00
+date: 2026-11-20 09:40:00 +01:00
 description: "입력은 Scanner와 BufferedReader, 출력은 System.out, printf, StringBuilder, BufferedWriter, PrintWriter. 쓰는 법과 속도, flush 함정까지 비교"
 categories: [Java]
 tags: [Java]

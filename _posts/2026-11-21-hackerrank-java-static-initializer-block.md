@@ -1,6 +1,6 @@
 ---
 title: "[HackerRank] Java Static Initializer Block"
-date: 2026-11-22 13:00:00 +01:00
+date: 2026-11-21 13:00:00 +01:00
 description: "정답은 나왔지만 문제의 의도와 다르게 푼 풀이. static 초기화 블록과 Exception 출력 형식으로 다시 풀기"
 categories: [HackerRank, Java]
 tags: [Java, 알고리즘, HackerRank]

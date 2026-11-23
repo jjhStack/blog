@@ -1,6 +1,6 @@
 ---
 title: "[HackerRank] End-of-file"
-date: 2026-11-21 09:35:00 +01:00
+date: 2026-11-20 09:35:00 +01:00
 description: "줄 수를 모르는 입력을 EOF까지 읽고 줄 번호를 붙여 출력하기. 두 번 틀리면서 배운 것"
 categories: [HackerRank, Java]
 tags: [Java, 알고리즘, HackerRank]
